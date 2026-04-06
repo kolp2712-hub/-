@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useSite } from '../context/SiteContext';
+import { auth } from '../firebase';
+import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
 import { 
   Settings, 
   Image as ImageIcon, 
@@ -17,27 +19,38 @@ import {
   PlusCircle,
   MessageSquare,
   PhoneCall,
-  Share
+  Share,
+  LogIn
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ImageManager } from '../components/admin/ImageManager';
 
 const Admin = () => {
-  const { data, updateData, addNotice, deleteNotice, updateNotice, compressAndSetImage } = useSite();
-  const [password, setPassword] = useState('');
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  const { data, user, isAuthReady, updateData, saveToFirestore, addNotice, deleteNotice, updateNotice, compressAndSetImage } = useSite();
   const [activeTab, setActiveTab] = useState<'content' | 'images' | 'notices' | 'seo' | 'quickmenu' | 'export'>('content');
   const [isSaving, setIsSaving] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password === '0000') {
-      setIsAuthorized(true);
-    } else {
-      alert('비밀번호가 틀렸습니다.');
+  const ADMIN_EMAIL = 'kolp2712@gmail.com';
+  const isAuthorized = user?.email === ADMIN_EMAIL && user?.emailVerified;
+
+  const handleLogin = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+      console.error('Login failed:', error);
+      alert('로그인에 실패했습니다.');
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error('Logout failed:', error);
     }
   };
 
@@ -48,12 +61,16 @@ const Admin = () => {
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setIsSaving(true);
-    setTimeout(() => {
+    try {
+      await saveToFirestore();
+      alert('모든 변경사항이 서버에 저장되었습니다.');
+    } catch (error) {
+      alert('저장에 실패했습니다. 권한이 없거나 네트워크 오류일 수 있습니다.');
+    } finally {
       setIsSaving(false);
-      alert('모든 변경사항이 저장되었습니다.');
-    }, 800);
+    }
   };
 
   const addFloorPlan = () => {
@@ -76,6 +93,14 @@ const Admin = () => {
     updateData({ floorPlans: data.floorPlans.filter(p => p.id !== id) });
   };
 
+  if (!isAuthReady) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
   if (!isAuthorized) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -85,26 +110,38 @@ const Admin = () => {
               <Settings className="w-8 h-8" />
             </div>
             <h1 className="text-2xl font-bold text-gray-900">관리자 로그인</h1>
-            <p className="text-gray-500 text-sm mt-2">비밀번호를 입력하여 관리자 모드에 접속하세요.</p>
+            <p className="text-gray-500 text-sm mt-2">
+              {user ? '권한이 없는 계정입니다. 관리자 계정으로 로그인하세요.' : '구글 계정으로 로그인하여 관리자 모드에 접속하세요.'}
+            </p>
+            {user && (
+              <div className="mt-2 p-2 bg-red-50 text-red-600 text-xs rounded-lg">
+                현재 계정: {user.email}
+              </div>
+            )}
           </div>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900 transition-all"
-              placeholder="비밀번호 (0000)"
-            />
+          
+          <div className="space-y-4">
             <button
-              type="submit"
-              className="w-full py-3 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition-all"
+              onClick={handleLogin}
+              className="w-full py-4 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 transition-all flex items-center justify-center gap-3 shadow-sm"
             >
-              접속하기
+              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-5 h-5" alt="Google" />
+              구글로 로그인하기
             </button>
-            <Link to="/" className="block text-center text-sm text-gray-400 hover:text-gray-600">
+            
+            {user && (
+              <button
+                onClick={handleLogout}
+                className="w-full py-3 text-sm text-gray-500 hover:text-gray-700 transition-all"
+              >
+                다른 계정으로 로그인
+              </button>
+            )}
+
+            <Link to="/" className="block text-center text-sm text-gray-400 hover:text-gray-600 pt-4">
               메인 페이지로 돌아가기
             </Link>
-          </form>
+          </div>
         </div>
       </div>
     );
@@ -176,7 +213,7 @@ const Admin = () => {
         </nav>
         <div className="p-4 border-t border-gray-100">
           <button
-            onClick={() => setIsAuthorized(false)}
+            onClick={handleLogout}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 transition-all"
           >
             <LogOut className="w-4 h-4" />

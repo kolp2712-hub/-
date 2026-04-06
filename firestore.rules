@@ -1,0 +1,37 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+             request.auth.token.email == "kolp2712@gmail.com" && 
+             request.auth.token.email_verified == true;
+    }
+
+    // ===============================================================
+    // Site Data Rules
+    // ===============================================================
+
+    match /site/data {
+      // Anyone can read the site configuration
+      allow read: if true;
+      
+      // Only the verified admin can update the site configuration
+      allow write: if isAdmin();
+    }
+    
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
