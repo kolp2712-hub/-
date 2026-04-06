@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { SiteData } from '../types';
 import { INITIAL_SITE_DATA } from '../constants';
 import imageCompression from 'browser-image-compression';
-import { db, auth, storage } from '../firebase';
+import { db, auth } from '../firebase';
 import { 
   doc, 
   onSnapshot, 
@@ -11,7 +11,6 @@ import {
   enableIndexedDbPersistence
 } from 'firebase/firestore';
 import { onAuthStateChanged, User } from 'firebase/auth';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 enum OperationType {
   CREATE = 'create',
@@ -229,36 +228,23 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }));
   };
 
-  const compressAndSetImage = async (file: File, callback: (url: string) => void) => {
-    if (!user) {
-      alert('로그인이 필요합니다.');
-      return;
-    }
-
+  const compressAndSetImage = async (file: File, callback: (base64: string) => void) => {
     const options = {
-      maxSizeMB: 0.8, // Storage를 사용하므로 압축을 덜 해도 됩니다 (고화질 유지)
-      maxWidthOrHeight: 1920,
+      maxSizeMB: 0.05, // 50KB로 아주 강력하게 압축 (1MB 제한 내에서 수십 장 저장 가능)
+      maxWidthOrHeight: 1280,
       useWebWorker: true,
     };
-
     try {
-      // 1. 이미지 압축
       const compressedFile = await imageCompression(file, options);
-      
-      // 2. Firebase Storage에 업로드
-      const fileName = `${Date.now()}_${file.name}`;
-      const storageRef = ref(storage, `images/${user.uid}/${fileName}`);
-      
-      const snapshot = await uploadBytes(storageRef, compressedFile);
-      
-      // 3. 다운로드 URL 가져오기
-      const downloadURL = await getDownloadURL(snapshot.ref);
-      
-      // 4. 콜백으로 URL 전달
-      callback(downloadURL);
+      const reader = new FileReader();
+      reader.readAsDataURL(compressedFile);
+      reader.onloadend = () => {
+        const base64data = reader.result as string;
+        callback(base64data);
+      };
     } catch (error) {
-      console.error('Image upload failed:', error);
-      alert('이미지 업로드에 실패했습니다.');
+      console.error('Image compression failed:', error);
+      alert('이미지 압축 및 첨부에 실패했습니다.');
     }
   };
 
