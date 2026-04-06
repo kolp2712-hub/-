@@ -181,6 +181,18 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.warn('User not authenticated. Cannot save to Firestore.');
       return;
     }
+    
+    // 데이터 크기 대략적 계산 (1MB 제한 체크)
+    const dataString = JSON.stringify(data);
+    const dataSizeInBytes = new Blob([dataString]).size;
+    const MAX_SIZE = 1000000; // 약 1MB
+    
+    if (dataSizeInBytes > MAX_SIZE) {
+      const errorMsg = `저장 용량 초과: 현재 약 ${(dataSizeInBytes / 1024 / 1024).toFixed(2)}MB입니다. 파이어베이스 무료 버전은 한 번에 1MB까지만 저장 가능합니다. 사진 개수를 줄이거나 더 작은 사진을 사용해 주세요.`;
+      alert(errorMsg);
+      throw new Error(errorMsg);
+    }
+
     try {
       const docRef = doc(db, 'site', 'data');
       await setDoc(docRef, data);
@@ -219,8 +231,8 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const compressAndSetImage = async (file: File, callback: (base64: string) => void) => {
     const options = {
-      maxSizeMB: 0.5,
-      maxWidthOrHeight: 1920,
+      maxSizeMB: 0.1, // 기존 0.5에서 0.1로 대폭 축소 (더 많은 사진 저장 가능)
+      maxWidthOrHeight: 1280, // 해상도도 약간 조절
       useWebWorker: true,
     };
     try {
