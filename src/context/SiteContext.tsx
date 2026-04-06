@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { SiteData } from '../types';
 import { INITIAL_SITE_DATA } from '../constants';
 import imageCompression from 'browser-image-compression';
-import { db, auth } from '../firebase';
+import { db, auth, storage } from '../firebase';
 import { 
   doc, 
   onSnapshot, 
@@ -11,6 +11,7 @@ import {
   enableIndexedDbPersistence
 } from 'firebase/firestore';
 import { onAuthStateChanged, User } from 'firebase/auth';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 enum OperationType {
   CREATE = 'create',
@@ -188,8 +189,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const MAX_SIZE = 1000000; // 약 1MB
     
     if (dataSizeInBytes > MAX_SIZE) {
-      const errorMsg = `저장 용량 초과: 현재 약 ${(dataSizeInBytes / 1024 / 1024).toFixed(2)}MB입니다. 파이어베이스 무료 버전은 한 번에 1MB까지만 저장 가능합니다. 사진 개수를 줄이거나 더 작은 사진을 사용해 주세요.`;
-      alert(errorMsg);
+      const errorMsg = `저장 용량 초과: 현재 약 ${(dataSizeInBytes / 1024 / 1024).toFixed(2)}MB입니다. 이미지가 너무 많거나 큽니다. 이미지를 다시 업로드하여 서버에 저장해 주세요. (새로 업로드한 이미지는 용량을 거의 차지하지 않습니다.)`;
       throw new Error(errorMsg);
     }
 
@@ -229,22 +229,36 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }));
   };
 
-  const compressAndSetImage = async (file: File, callback: (base64: string) => void) => {
+  const compressAndSetImage = async (file: File, callback: (url: string) => void) => {
+    if (!user) {
+      alert('로그인이 필요합니다.');
+      return;
+    }
+
     const options = {
-      maxSizeMB: 0.1, // 기존 0.5에서 0.1로 대폭 축소 (더 많은 사진 저장 가능)
-      maxWidthOrHeight: 1280, // 해상도도 약간 조절
+      maxSizeMB: 0.8, // Storage를 사용하므로 압축을 덜 해도 됩니다 (고화질 유지)
+      maxWidthOrHeight: 1920,
       useWebWorker: true,
     };
+
     try {
+      // 1. 이미지 압축
       const compressedFile = await imageCompression(file, options);
-      const reader = new FileReader();
-      reader.readAsDataURL(compressedFile);
-      reader.onloadend = () => {
-        const base64data = reader.result as string;
-        callback(base64data);
-      };
+      
+      // 2. Firebase Storage에 업로드
+      const fileName = `${Date.now()}_${file.name}`;
+      const storageRef = ref(storage, `images/${user.uid}/${fileName}`);
+      
+      const snapshot = await uploadBytes(storageRef, compressedFile);
+      
+      // 3. 다운로드 URL 가져오기
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      
+      // 4. 콜백으로 URL 전달
+      callback(downloadURL);
     } catch (error) {
-      console.error('Image compression failed:', error);
+      console.error('Image upload failed:', error);
+      alert('이미지 업로드에 실패했습니다.');
     }
   };
 

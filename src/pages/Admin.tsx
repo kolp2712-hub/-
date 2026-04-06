@@ -66,7 +66,7 @@ const Admin = () => {
     }
   };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, callback: (base64: string) => void) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, callback: (url: string) => void) => {
     const file = e.target.files?.[0];
     if (file) {
       await compressAndSetImage(file, callback);
@@ -78,8 +78,8 @@ const Admin = () => {
     try {
       await saveToFirestore();
       alert('모든 변경사항이 서버에 저장되었습니다.');
-    } catch (error) {
-      alert('저장에 실패했습니다. 권한이 없거나 네트워크 오류일 수 있습니다.');
+    } catch (error: any) {
+      alert(error.message || '저장에 실패했습니다. 권한이 없거나 네트워크 오류일 수 있습니다.');
     } finally {
       setIsSaving(false);
     }
