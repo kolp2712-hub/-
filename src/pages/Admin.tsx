@@ -40,9 +40,21 @@ const Admin = () => {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Login failed:', error);
-      alert('로그인에 실패했습니다.');
+      
+      // 사용자 친절한 오류 메시지 처리
+      if (error.code === 'auth/popup-blocked') {
+        alert('브라우저의 팝업 차단 기능이 활성화되어 있습니다. 주소창 옆의 팝업 차단 해제 아이콘을 클릭하여 팝업을 허용해 주세요.');
+      } else if (error.code === 'auth/cancelled-popup-request') {
+        // 이미 로그인 팝업이 진행 중인 경우이므로 별도의 알림 없이 로그만 남깁니다.
+      } else if (error.code === 'auth/user-cancelled') {
+        // 사용자가 직접 창을 닫은 경우이므로 별도의 알림을 띄우지 않습니다.
+      } else if (error.code === 'auth/network-request-failed') {
+        alert('네트워크 연결이 불안정합니다. 인터넷 연결을 확인해 주세요.');
+      } else {
+        alert('로그인 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+      }
     }
   };
 
