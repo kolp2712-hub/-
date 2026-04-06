@@ -26,8 +26,9 @@ const Admin = () => {
   const { data, updateData, addNotice, deleteNotice, updateNotice, compressAndSetImage } = useSite();
   const [password, setPassword] = useState('');
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const [activeTab, setActiveTab] = useState<'content' | 'images' | 'notices' | 'seo' | 'quickmenu'>('content');
+  const [activeTab, setActiveTab] = useState<'content' | 'images' | 'notices' | 'seo' | 'quickmenu' | 'export'>('content');
   const [isSaving, setIsSaving] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
 
@@ -163,6 +164,15 @@ const Admin = () => {
             <Globe className="w-4 h-4" />
             SEO 설정
           </button>
+          <button
+            onClick={() => setActiveTab('export')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+              activeTab === 'export' ? 'bg-gray-900 text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'
+            }`}
+          >
+            <Share className="w-4 h-4" />
+            데이터 내보내기
+          </button>
         </nav>
         <div className="p-4 border-t border-gray-100">
           <button
@@ -185,6 +195,7 @@ const Admin = () => {
               {activeTab === 'quickmenu' && '퀵메뉴 설정'}
               {activeTab === 'notices' && '게시글 관리'}
               {activeTab === 'seo' && 'SEO 설정'}
+              {activeTab === 'export' && '데이터 내보내기 (수동 업데이트용)'}
             </h2>
             <Link to="/" className="text-sm font-medium text-gray-500 hover:text-gray-900 flex items-center gap-1">
               사이트 보기 <ChevronRight className="w-4 h-4" />
@@ -578,6 +589,46 @@ const Admin = () => {
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900"
                     />
                   </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'export' && (
+            <div className="space-y-6">
+              <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 space-y-6">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-bold flex items-center gap-2">
+                    <Share className="w-5 h-5" /> 수동 업데이트 데이터 추출
+                  </h3>
+                  <button
+                    onClick={() => {
+                      const code = `import { SiteData } from './types';\n\nexport const INITIAL_SITE_DATA: SiteData = ${JSON.stringify(data, null, 2)};`;
+                      navigator.clipboard.writeText(code);
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 2000);
+                    }}
+                    className="px-4 py-2 bg-gray-900 text-white rounded-xl text-sm font-bold flex items-center gap-2"
+                  >
+                    {copied ? '복사 완료!' : '코드 복사하기'}
+                  </button>
+                </div>
+                
+                <div className="p-6 bg-red-50 rounded-2xl border border-red-100">
+                  <h4 className="text-red-800 font-bold text-sm mb-2">⚠️ 필독: Netlify/GitHub 수동 업데이트 방법</h4>
+                  <ol className="text-red-700 text-xs space-y-2 list-decimal ml-4">
+                    <li>아래의 코드를 <strong>[코드 복사하기]</strong> 버튼으로 복사합니다.</li>
+                    <li>내 컴퓨터의 프로젝트 폴더에서 <strong>src/constants.ts</strong> 파일을 엽니다.</li>
+                    <li>파일의 전체 내용을 지우고 복사한 코드를 붙여넣습니다.</li>
+                    <li>GitHub에 <strong>Commit & Push</strong> 합니다.</li>
+                    <li>Netlify가 자동으로 빌드하여 모든 방문자에게 변경사항이 적용됩니다.</li>
+                  </ol>
+                </div>
+
+                <div className="relative">
+                  <pre className="w-full h-[400px] overflow-auto bg-gray-900 text-gray-300 p-6 rounded-2xl text-[10px] font-mono leading-relaxed">
+                    {`import { SiteData } from './types';\n\nexport const INITIAL_SITE_DATA: SiteData = ${JSON.stringify(data, null, 2)};`}
+                  </pre>
                 </div>
               </div>
             </div>
