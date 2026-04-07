@@ -165,18 +165,42 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // 4. SEO Updates
   useEffect(() => {
-    document.title = data.seoTitle || INITIAL_SITE_DATA.seoTitle;
-    const metaDesc = document.querySelector('meta[name="description"]');
+    const title = data.seoTitle || INITIAL_SITE_DATA.seoTitle;
     const desc = data.seoDescription || INITIAL_SITE_DATA.seoDescription;
-    if (metaDesc) {
-      metaDesc.setAttribute('content', desc);
-    } else {
-      const newMeta = document.createElement('meta');
-      newMeta.name = 'description';
-      newMeta.content = desc;
-      document.head.appendChild(newMeta);
-    }
-  }, [data.seoTitle, data.seoDescription]);
+    const image = data.heroImages?.[0] || "https://picsum.photos/seed/vista-hero/1200/630";
+    const url = window.location.href;
+
+    document.title = title;
+
+    const updateMeta = (selector: string, attr: string, value: string) => {
+      let element = document.querySelector(selector);
+      if (element) {
+        element.setAttribute(attr, value);
+      } else {
+        element = document.createElement('meta');
+        if (selector.startsWith('meta[name')) {
+          (element as HTMLMetaElement).name = selector.split('"')[1];
+        } else {
+          (element as HTMLMetaElement).setAttribute('property', selector.split('"')[1]);
+        }
+        element.setAttribute(attr, value);
+        document.head.appendChild(element);
+      }
+    };
+
+    updateMeta('meta[name="description"]', 'content', desc);
+    
+    // OG Tags
+    updateMeta('meta[property="og:title"]', 'content', title);
+    updateMeta('meta[property="og:description"]', 'content', desc);
+    updateMeta('meta[property="og:image"]', 'content', image);
+    updateMeta('meta[property="og:url"]', 'content', url);
+
+    // Twitter Tags
+    updateMeta('meta[property="twitter:title"]', 'content', title);
+    updateMeta('meta[property="twitter:description"]', 'content', desc);
+    updateMeta('meta[property="twitter:image"]', 'content', image);
+  }, [data.seoTitle, data.seoDescription, data.heroImages]);
 
   const updateData = (newData: Partial<SiteData>) => {
     setData(prev => ({ ...prev, ...newData }));
