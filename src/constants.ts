@@ -52,6 +52,7 @@ export const INITIAL_SITE_DATA: SiteData = {
   locationTitle: "Location",
   locationSubtitle: "평택의 중심, 브레인시티의 미래가치",
   locationMaps: ["https://picsum.photos/seed/vista-map/1200/800"],
+  locationMapUrl: "https://map.kakao.com/",
   locationButtonText: "카카오맵으로 보기",
   locationFeatures: [
     { id: "lf1", title: "광역 교통망", description: "SRT 평택지제역, 1호선 평택역 등 쾌속 교통망으로 서울 및 수도권 접근성이 뛰어납니다.", icon: "train" },
@@ -106,6 +107,9 @@ export const INITIAL_SITE_DATA: SiteData = {
   inquirySubtitle: "분양 상담 예약",
   inquiryDescription: "전문 상담사가 친절하게 안내해 드립니다. 연락처를 남겨주세요.",
   inquiryButtonText: "상담 예약 신청하기",
+  
+  // e-Model House
+  eModelHouseUrl: "https://my.matterport.com/show/?m=...",
   
   // Footer Section
   footerCopyright: "© 2026 동원건설. All rights reserved.",

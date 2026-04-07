@@ -125,7 +125,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const collections = [
       'metadata', 'hero', 'highlights', 'gallery', 
-      'location', 'floorplans', 'notices', 'footer'
+      'location', 'floorplans', 'notices', 'footer', 'e_model'
     ];
     
     const unsubscribes = collections.map(col => {
@@ -232,6 +232,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
         locationTitle: data.locationTitle,
         locationSubtitle: data.locationSubtitle,
         locationMaps: data.locationMaps,
+        locationMapUrl: data.locationMapUrl,
         locationButtonText: data.locationButtonText,
         locationFeatures: data.locationFeatures
       },
@@ -244,6 +245,9 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
         noticesTitle: data.noticesTitle,
         noticesSubtitle: data.noticesSubtitle,
         notices: data.notices
+      },
+      e_model: {
+        eModelHouseUrl: data.eModelHouseUrl
       },
       footer: {
         footerCopyright: data.footerCopyright,

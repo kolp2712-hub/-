@@ -64,12 +64,15 @@ export const LocationMap = () => {
               );
             })}
 
-            <button
-              className="w-full py-4 rounded-xl text-white font-bold transition-all hover:opacity-90"
+            <a
+              href={data.locationMapUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-4 rounded-xl text-white font-bold transition-all hover:opacity-90 text-center block"
               style={{ backgroundColor: data.themeColor }}
             >
               {data.locationButtonText}
-            </button>
+            </a>
           </div>
         </div>
       </div>

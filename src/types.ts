@@ -33,6 +33,7 @@ export interface SiteData {
   locationTitle: string;
   locationSubtitle: string;
   locationMaps: string[]; // base64 array
+  locationMapUrl: string; // external map link
   locationButtonText: string;
   locationFeatures: {
     id: string;
@@ -67,6 +68,9 @@ export interface SiteData {
   inquirySubtitle: string;
   inquiryDescription: string;
   inquiryButtonText: string;
+  
+  // e-Model House
+  eModelHouseUrl: string;
   
   // Footer Section
   footerCopyright: string;

@@ -42,12 +42,20 @@ export const Hero = () => {
                       {data.heroDescription}
                     </p>
 
-                    <div className="pt-8">
+                    <div className="pt-8 flex flex-col sm:flex-row gap-4 justify-center">
                       <a
                         href="#inquiry"
                         className="inline-block px-10 py-4 bg-white text-gray-900 font-bold rounded-full hover:bg-gray-100 transition-all transform hover:scale-105"
                       >
                         {data.heroButtonText}
+                      </a>
+                      <a
+                        href={data.eModelHouseUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block px-10 py-4 border-2 border-white text-white font-bold rounded-full hover:bg-white/10 transition-all transform hover:scale-105"
+                      >
+                        e-모델하우스 보기
                       </a>
                     </div>
                   </motion.div>

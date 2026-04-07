@@ -331,6 +331,26 @@ const Admin = () => {
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900"
                     />
                   </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">지도 연결 URL (카카오/네이버)</label>
+                    <input
+                      type="text"
+                      value={data.locationMapUrl}
+                      onChange={(e) => updateData({ locationMapUrl: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900"
+                      placeholder="https://map.kakao.com/..."
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">e-모델하우스 URL</label>
+                    <input
+                      type="text"
+                      value={data.eModelHouseUrl}
+                      onChange={(e) => updateData({ eModelHouseUrl: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900"
+                      placeholder="https://my.matterport.com/..."
+                    />
+                  </div>
                 </div>
               </div>
 
