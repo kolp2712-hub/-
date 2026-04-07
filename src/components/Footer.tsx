@@ -5,12 +5,18 @@ import { Facebook, Instagram, Youtube, Phone } from 'lucide-react';
 export const Footer = () => {
   const { data } = useSite();
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <footer className="bg-[#333333] text-white py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div className="space-y-4">
-            <h3 className="text-xl font-bold">{data.title}</h3>
+            <h3 className="text-xl font-bold cursor-pointer hover:text-gray-300 transition-colors" onClick={scrollToTop}>
+              {data.title}
+            </h3>
             <p className="text-gray-400 text-sm leading-relaxed">
               {data.heroSlogan}
             </p>

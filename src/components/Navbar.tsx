@@ -8,6 +8,12 @@ export const Navbar = () => {
   const { data } = useSite();
   const [isOpen, setIsOpen] = useState(false);
 
+  const scrollToTop = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setIsOpen(false);
+  };
+
   const navItems = [
     { name: '단지안내', href: '#gallery' },
     { name: '입지환경', href: '#location' },
@@ -22,7 +28,7 @@ export const Navbar = () => {
         <div className="flex h-20 items-center">
           {/* Left: Logo */}
           <div className="flex-1 flex justify-start">
-            <Link to="/" className="flex items-center gap-2 shrink-0">
+            <Link to="/" onClick={scrollToTop} className="flex items-center gap-2 shrink-0">
               <span className="text-lg md:text-xl font-bold tracking-tight text-gray-900">{data.title}</span>
             </Link>
           </div>
