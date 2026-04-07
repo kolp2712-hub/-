@@ -1,16 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSite } from '../context/SiteContext';
-import * as LucideIcons from 'lucide-react';
 import { Menu, X, Phone } from 'lucide-react';
 import { useState } from 'react';
 
 export const Navbar = () => {
   const { data } = useSite();
   const [isOpen, setIsOpen] = useState(false);
-
-  // Dynamically get the icon from lucide-react
-  const LogoIcon = (LucideIcons as any)[data.logoIcon] || LucideIcons.Building2;
 
   const navItems = [
     { name: '단지안내', href: '#gallery' },

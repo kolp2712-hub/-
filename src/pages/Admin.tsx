@@ -161,7 +161,30 @@ const Admin = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
+      {/* Mobile Tab Selector */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 px-4 py-2 flex overflow-x-auto gap-2 no-scrollbar">
+        {[
+          { id: 'content', icon: LayoutDashboard, label: '콘텐츠' },
+          { id: 'images', icon: ImageIcon, label: '이미지' },
+          { id: 'quickmenu', icon: MessageSquare, label: '퀵메뉴' },
+          { id: 'notices', icon: FileText, label: '게시글' },
+          { id: 'seo', icon: Globe, label: 'SEO' },
+          { id: 'export', icon: Share, label: '내보내기' },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id as any)}
+            className={`flex-none flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all ${
+              activeTab === tab.id ? 'bg-gray-900 text-white' : 'text-gray-500'
+            }`}
+          >
+            <tab.icon className="w-5 h-5" />
+            <span className="text-[10px] font-bold">{tab.label}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Sidebar (Desktop) */}
       <aside className="w-64 bg-white border-r border-gray-200 hidden lg:flex flex-col sticky top-0 h-screen">
         <div className="p-6 border-b border-gray-100 flex items-center gap-3">
           <Settings className="w-6 h-6 text-gray-900" />
@@ -235,7 +258,7 @@ const Admin = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto p-8">
+      <main className="flex-1 overflow-y-auto p-4 md:p-8 pb-24 lg:pb-8">
         <div className="max-w-4xl mx-auto">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-2xl font-bold text-gray-900">
