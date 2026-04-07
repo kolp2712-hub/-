@@ -131,6 +131,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const unsubscribes = collections.map(col => {
       const docRef = doc(db, 'site_content', col);
       return onSnapshot(docRef, (docSnap) => {
+        // If we are currently saving, ignore remote updates to prevent overwriting local state
         if (docSnap.exists()) {
           const partData = docSnap.data();
           setData(prev => {
@@ -153,25 +154,11 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
     });
 
-    // Legacy Fallback Listener
-    const legacyDocRef = doc(db, 'site', 'data');
-    const legacyUnsubscribe = onSnapshot(legacyDocRef, (docSnap) => {
-      if (docSnap.exists()) {
-        const remoteData = docSnap.data() as SiteData;
-        setData(prev => ({
-          ...prev,
-          ...remoteData,
-          quickMenu: { ...prev.quickMenu, ...(remoteData.quickMenu || {}) }
-        }));
-      }
-    });
-
     // Mark as loaded after a short delay to allow initial snapshots to arrive
     const timer = setTimeout(() => setIsDataLoaded(true), 1500);
 
     return () => {
       unsubscribes.forEach(unsub => unsub());
-      legacyUnsubscribe();
       clearTimeout(timer);
     };
   }, []);
