@@ -68,6 +68,7 @@ interface SiteContextType {
   data: SiteData;
   user: User | null;
   isAuthReady: boolean;
+  isDataLoaded: boolean;
   updateData: (newData: Partial<SiteData>) => void;
   saveToFirestore: () => Promise<void>;
   addNotice: (notice: { title: string; content: string }) => void;
@@ -131,7 +132,6 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const unsubscribes = collections.map(col => {
       const docRef = doc(db, 'site_content', col);
       return onSnapshot(docRef, (docSnap) => {
-        // If we are currently saving, ignore remote updates to prevent overwriting local state
         if (docSnap.exists()) {
           const partData = docSnap.data();
           setData(prev => {
@@ -149,17 +149,17 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
             return newData;
           });
         }
+        // Mark as loaded once we get the first response (even if empty)
+        setIsDataLoaded(true);
       }, (error) => {
         handleFirestoreError(error, OperationType.GET, `site_content/${col}`);
+        // Also mark as loaded on error to prevent infinite loading
+        setIsDataLoaded(true);
       });
     });
 
-    // Mark as loaded after a short delay to allow initial snapshots to arrive
-    const timer = setTimeout(() => setIsDataLoaded(true), 1500);
-
     return () => {
       unsubscribes.forEach(unsub => unsub());
-      clearTimeout(timer);
     };
   }, []);
 
@@ -311,6 +311,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       data, 
       user, 
       isAuthReady, 
+      isDataLoaded,
       updateData, 
       saveToFirestore, 
       addNotice, 
