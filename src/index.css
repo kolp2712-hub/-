@@ -5,6 +5,15 @@
   --font-sans: "Pretendard", "Noto Sans KR", ui-sans-serif, system-ui, sans-serif;
 }
 
+@keyframes shimmer {
+  0% { transform: translateX(-150%) skewX(-20deg); }
+  100% { transform: translateX(150%) skewX(-20deg); }
+}
+
+.animate-shimmer {
+  animation: shimmer 2.5s infinite;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;

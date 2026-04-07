@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSite } from '../context/SiteContext';
 import { motion } from 'motion/react';
+import { Star } from 'lucide-react';
 
 export const FloatingBanner = () => {
   const { data } = useSite();
@@ -18,31 +19,43 @@ export const FloatingBanner = () => {
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       whileHover={{ scale: 1.05 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
       className="fixed right-4 top-1/2 -translate-y-1/2 z-[9999] hidden lg:flex"
     >
       <a
         href={`tel:${banner.phone}`}
-        className="quick-admin-banner flex items-stretch bg-[#4B0082] border-[4px] border-[#FFD700] rounded-2xl overflow-hidden shadow-2xl transition-all duration-300"
+        className="relative quick-admin-banner flex items-stretch bg-[#6B0024] border-[4px] border-[#FFD700] rounded-2xl overflow-hidden shadow-[0_0_25px_rgba(255,215,0,0.4)] transition-all duration-300"
       >
-        {/* Line 1: White Vertical Text */}
-        <div className="px-3 py-6 flex items-center justify-center border-r border-white/20">
-          <span className="text-white font-bold text-lg [writing-mode:vertical-rl] tracking-widest">
-            {banner.line1}
-          </span>
+        {/* Shimmer Effect Overlay */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="w-1/2 h-full bg-white/20 blur-xl animate-shimmer" />
         </div>
 
-        {/* Line 2: Yellow Vertical Text */}
-        <div className="px-3 py-6 flex items-center justify-center border-r border-white/20">
-          <span className="text-[#FFD700] font-bold text-lg [writing-mode:vertical-rl] tracking-widest">
+        {/* Line 1: White Vertical Text with Pill Background */}
+        <div className="px-3 py-6 flex flex-col items-center justify-center border-r border-white/10 bg-[#4A0019]">
+          <div className="bg-white px-1.5 py-4 rounded-full flex items-center justify-center">
+            <span className="text-[#6B0024] font-black text-base [writing-mode:vertical-rl] tracking-tighter leading-none">
+              {banner.line1}
+            </span>
+          </div>
+        </div>
+
+        {/* Line 2: Yellow Vertical Text with Star */}
+        <div className="px-3 py-6 flex flex-col items-center justify-center border-r border-white/10 gap-2">
+          <Star className="w-4 h-4 text-[#FFD700] fill-[#FFD700] animate-pulse" />
+          <span className="text-[#FFD700] font-black text-lg [writing-mode:vertical-rl] tracking-widest drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
             {banner.line2}
           </span>
         </div>
 
-        {/* Line 3: Yellow Box with Purple Vertical Text */}
-        <div className="px-4 py-6 bg-[#FFD700] flex flex-col items-center justify-center gap-2">
-          <span className="text-[#4B0082] font-black text-xl [writing-mode:vertical-rl] tracking-widest">
+        {/* Line 3: Teal/Green Box with Large White Vertical Text */}
+        <div className="px-4 py-6 bg-[#004D40] flex flex-col items-center justify-center gap-2 relative">
+          <span className="text-white/70 text-[10px] [writing-mode:vertical-rl] font-bold mb-1">대표상담전화</span>
+          <span className="text-white font-black text-2xl [writing-mode:vertical-rl] tracking-tighter drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
             {banner.phone}
           </span>
+          {/* Sparkle Dot */}
+          <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-white rounded-full animate-ping" />
         </div>
       </a>
     </motion.div>
