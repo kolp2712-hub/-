@@ -8,9 +8,10 @@ export const FloatingBanner = () => {
   const banner = data.floatingBanner || {
     line1: "모델하우스 방문예약 접수중",
     line2: "입주시까지 0원 파격조건",
-    phone: "1588-0000",
+    phone: data.representativePhone,
     show: true
   };
+  const phone = banner.phone || data.representativePhone;
 
   if (!banner.show) return null;
 
@@ -23,7 +24,7 @@ export const FloatingBanner = () => {
       className="fixed right-4 top-1/2 -translate-y-1/2 z-[9999] hidden lg:flex"
     >
       <a
-        href={`tel:${banner.phone}`}
+        href={`tel:${phone}`}
         className="relative quick-admin-banner flex items-stretch bg-[#6B0024] border-[4px] border-[#FFD700] rounded-2xl overflow-hidden shadow-[0_0_25px_rgba(255,215,0,0.4)] transition-all duration-300"
       >
         {/* Shimmer Effect Overlay */}
@@ -52,7 +53,7 @@ export const FloatingBanner = () => {
         <div className="px-4 py-6 bg-[#004D40] flex flex-col items-center justify-center gap-2 relative">
           <span className="text-white/70 text-[10px] [writing-mode:vertical-rl] font-bold mb-1">대표상담전화</span>
           <span className="text-white font-black text-2xl [writing-mode:vertical-rl] tracking-tighter drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
-            {banner.phone}
+            {phone}
           </span>
           {/* Sparkle Dot */}
           <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-white rounded-full animate-ping" />

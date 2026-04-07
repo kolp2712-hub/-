@@ -35,7 +35,7 @@ export const QuickMenu = () => {
           </div>
           <div className="flex flex-col">
             <span className="text-[10px] text-gray-500 font-medium leading-none mb-1">분양문의/상담예약</span>
-            <span className="text-lg font-black text-gray-900 leading-none">{data.quickMenu.phone}</span>
+            <span className="text-lg font-black text-gray-900 leading-none">{data.representativePhone}</span>
           </div>
         </motion.div>
       )}
@@ -61,7 +61,7 @@ export const QuickMenu = () => {
 
             {/* Phone Button */}
             <a
-              href={`tel:${data.quickMenu.phone}`}
+              href={`tel:${data.representativePhone}`}
               className="flex items-center gap-3 bg-white text-gray-900 px-4 py-3 rounded-2xl shadow-xl font-bold hover:scale-105 transition-transform border border-gray-100"
             >
               <Phone className="w-5 h-5" style={{ color: data.themeColor }} />

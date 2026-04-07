@@ -4,7 +4,7 @@ import { MessageSquare, Phone } from 'lucide-react';
 
 export const MobileStickyFooter = () => {
   const { data } = useSite();
-  const phone = data.quickMenu.phone;
+  const phone = data.representativePhone;
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-[9999] lg:hidden">

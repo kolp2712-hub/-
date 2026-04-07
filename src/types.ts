@@ -6,6 +6,7 @@ export interface SiteData {
   // Header
   title: string;
   logoIcon: string; // lucide icon name
+  representativePhone: string; // Global phone number
   
   // Hero Section
   heroSlogan: string;

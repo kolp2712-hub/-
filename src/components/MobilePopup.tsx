@@ -74,12 +74,12 @@ export const MobilePopup = () => {
 
               {/* Line 3: Teal Box with Phone */}
               <a
-                href={`tel:${banner.phone}`}
+                href={`tel:${banner.phone || data.representativePhone}`}
                 className="block bg-[#004D40] p-6 rounded-2xl text-center border border-white/20 shadow-inner group active:scale-95 transition-transform"
               >
                 <p className="text-white/70 text-xs font-bold mb-1">모델하우스 24시간 대표상담전화</p>
                 <p className="text-white font-black text-4xl tracking-tighter group-hover:scale-105 transition-transform">
-                  {banner.phone}
+                  {banner.phone || data.representativePhone}
                 </p>
               </a>
             </div>

@@ -8,6 +8,7 @@ export const INITIAL_SITE_DATA: SiteData = {
   // Header
   title: "평택 브레인시티 비스타동원",
   logoIcon: "building-2",
+  representativePhone: "1588-0000",
   
   // Hero Section
   heroSlogan: "평택의 미래를 여는 프리미엄 주거의 완성",

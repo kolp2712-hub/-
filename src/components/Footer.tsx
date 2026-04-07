@@ -50,7 +50,7 @@ export const Footer = () => {
             <h4 className="text-sm font-bold uppercase tracking-wider mb-6">분양문의</h4>
             <div className="flex items-center gap-3 text-2xl font-bold" style={{ color: data.themeColor }}>
               <Phone className="w-6 h-6" />
-              {data.footerInfo.phone}
+              {data.representativePhone}
             </div>
             <p className="text-xs text-gray-500 mt-4">
               ※ 본 사이트의 이미지는 소비자의 이해를 돕기 위한 것으로 실제와 다를 수 있습니다.

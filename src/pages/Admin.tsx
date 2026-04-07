@@ -294,6 +294,16 @@ const Admin = () => {
                     />
                   </div>
                   <div className="space-y-2">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">대표 전화번호 (전체 자동 연결)</label>
+                    <input
+                      type="text"
+                      value={data.representativePhone}
+                      onChange={(e) => updateData({ representativePhone: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900"
+                      placeholder="1588-0000"
+                    />
+                  </div>
+                  <div className="space-y-2">
                     <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">히어로 슬로건</label>
                     <input
                       type="text"
@@ -422,11 +432,11 @@ const Admin = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">분양 문의 번호</label>
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">분양 문의 번호 (대표번호와 연동)</label>
                     <input
                       type="text"
-                      value={data.footerInfo.phone}
-                      onChange={(e) => updateData({ footerInfo: { ...data.footerInfo, phone: e.target.value } })}
+                      value={data.representativePhone}
+                      onChange={(e) => updateData({ representativePhone: e.target.value })}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200"
                     />
                   </div>
@@ -589,11 +599,11 @@ const Admin = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">상담 전화번호</label>
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">상담 전화번호 (대표번호와 연동)</label>
                     <input
                       type="text"
-                      value={data.quickMenu.phone}
-                      onChange={(e) => updateData({ quickMenu: { ...data.quickMenu, phone: e.target.value } })}
+                      value={data.representativePhone}
+                      onChange={(e) => updateData({ representativePhone: e.target.value })}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200"
                       placeholder="010-0000-0000"
                     />
@@ -640,11 +650,11 @@ const Admin = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">3열 전화번호 (보라색 글씨)</label>
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">3열 전화번호 (대표번호와 연동)</label>
                     <input
                       type="text"
-                      value={data.floatingBanner.phone}
-                      onChange={(e) => updateData({ floatingBanner: { ...data.floatingBanner, phone: e.target.value } })}
+                      value={data.representativePhone}
+                      onChange={(e) => updateData({ representativePhone: e.target.value })}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900"
                       placeholder="예: 1588-0000"
                     />

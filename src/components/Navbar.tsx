@@ -33,17 +33,8 @@ export const Navbar = () => {
             </Link>
           </div>
 
-          {/* Center: Call Button */}
-          <div className="flex-none">
-            <a
-              href={`tel:${data.quickMenu.phone}`}
-              className="flex items-center gap-2 px-4 py-2 rounded-full text-white font-bold transition-all hover:scale-105 active:scale-95 shadow-md text-sm md:text-base"
-              style={{ backgroundColor: data.themeColor }}
-            >
-              <Phone className="w-4 h-4" />
-              <span>전화하기</span>
-            </a>
-          </div>
+          {/* Center: Spacer or Title extension */}
+          <div className="flex-none" />
 
           {/* Right: Nav & Admin */}
           <div className="flex-1 flex justify-end items-center gap-4 md:gap-8">

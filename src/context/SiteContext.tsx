@@ -196,7 +196,8 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
         themeColor: data.themeColor,
         fontFamily: data.fontFamily,
         title: data.title,
-        logoIcon: data.logoIcon
+        logoIcon: data.logoIcon,
+        representativePhone: data.representativePhone
       },
       hero: {
         heroSlogan: data.heroSlogan,
