@@ -121,53 +121,72 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     testConnection();
   }, []);
 
-  // 3. Real-time Firestore Listener
+  // 3. Real-time Firestore Listener (Split Data)
   useEffect(() => {
-    const docRef = doc(db, 'site', 'data');
-    const unsubscribe = onSnapshot(docRef, (docSnap) => {
-      if (docSnap.exists()) {
-        const remoteData = docSnap.data() as SiteData;
-        
-        // Data Migration / Merging
-        const mergedData = {
-          ...INITIAL_SITE_DATA,
-          ...remoteData,
-          quickMenu: { ...INITIAL_SITE_DATA.quickMenu, ...(remoteData.quickMenu || {}) },
-          floorPlans: (remoteData.floorPlans || []).map((plan: any) => {
-            if (!plan.images && plan.image) {
-              return { ...plan, images: [plan.image] };
+    const collections = [
+      'metadata', 'hero', 'highlights', 'gallery', 
+      'location', 'floorplans', 'notices', 'footer'
+    ];
+    
+    const unsubscribes = collections.map(col => {
+      const docRef = doc(db, 'site_content', col);
+      return onSnapshot(docRef, (docSnap) => {
+        if (docSnap.exists()) {
+          const partData = docSnap.data();
+          setData(prev => {
+            const newData = { ...prev, ...partData };
+            
+            // Data Migration / Merging for specific fields
+            if (col === 'floorplans' && partData.floorPlans) {
+              newData.floorPlans = partData.floorPlans.map((plan: any) => {
+                if (!plan.images && plan.image) return { ...plan, images: [plan.image] };
+                if (!plan.images) return { ...plan, images: [] };
+                return plan;
+              });
             }
-            if (!plan.images) {
-              return { ...plan, images: [] };
-            }
-            return plan;
-          })
-        };
-        
-        setData(mergedData);
-        setIsDataLoaded(true);
-      } else {
-        // If no data in Firestore, use INITIAL_SITE_DATA
-        // We don't automatically save it yet to avoid accidental overwrites
-        setIsDataLoaded(true);
-      }
-    }, (error) => {
-      handleFirestoreError(error, OperationType.GET, 'site/data');
+            
+            return newData;
+          });
+        }
+      }, (error) => {
+        handleFirestoreError(error, OperationType.GET, `site_content/${col}`);
+      });
     });
 
-    return () => unsubscribe();
+    // Legacy Fallback Listener
+    const legacyDocRef = doc(db, 'site', 'data');
+    const legacyUnsubscribe = onSnapshot(legacyDocRef, (docSnap) => {
+      if (docSnap.exists()) {
+        const remoteData = docSnap.data() as SiteData;
+        setData(prev => ({
+          ...prev,
+          ...remoteData,
+          quickMenu: { ...prev.quickMenu, ...(remoteData.quickMenu || {}) }
+        }));
+      }
+    });
+
+    // Mark as loaded after a short delay to allow initial snapshots to arrive
+    const timer = setTimeout(() => setIsDataLoaded(true), 1500);
+
+    return () => {
+      unsubscribes.forEach(unsub => unsub());
+      legacyUnsubscribe();
+      clearTimeout(timer);
+    };
   }, []);
 
   // 4. SEO Updates
   useEffect(() => {
-    document.title = data.seoTitle;
+    document.title = data.seoTitle || INITIAL_SITE_DATA.seoTitle;
     const metaDesc = document.querySelector('meta[name="description"]');
+    const desc = data.seoDescription || INITIAL_SITE_DATA.seoDescription;
     if (metaDesc) {
-      metaDesc.setAttribute('content', data.seoDescription);
+      metaDesc.setAttribute('content', desc);
     } else {
       const newMeta = document.createElement('meta');
       newMeta.name = 'description';
-      newMeta.content = data.seoDescription;
+      newMeta.content = desc;
       document.head.appendChild(newMeta);
     }
   }, [data.seoTitle, data.seoDescription]);
@@ -182,21 +201,65 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return;
     }
     
-    // 데이터 크기 대략적 계산 (1MB 제한 체크)
-    const dataString = JSON.stringify(data);
-    const dataSizeInBytes = new Blob([dataString]).size;
-    const MAX_SIZE = 1000000; // 약 1MB
-    
-    if (dataSizeInBytes > MAX_SIZE) {
-      const errorMsg = `저장 용량 초과: 현재 약 ${(dataSizeInBytes / 1024 / 1024).toFixed(2)}MB입니다. 이미지가 너무 많거나 큽니다. 이미지를 다시 업로드하여 서버에 저장해 주세요. (새로 업로드한 이미지는 용량을 거의 차지하지 않습니다.)`;
-      throw new Error(errorMsg);
-    }
+    // Split data into parts
+    const parts = {
+      metadata: {
+        seoTitle: data.seoTitle,
+        seoDescription: data.seoDescription,
+        themeColor: data.themeColor,
+        fontFamily: data.fontFamily,
+        title: data.title,
+        logoIcon: data.logoIcon
+      },
+      hero: {
+        heroSlogan: data.heroSlogan,
+        heroDescription: data.heroDescription,
+        heroButtonText: data.heroButtonText,
+        heroImages: data.heroImages
+      },
+      highlights: {
+        highlightsTitle: data.highlightsTitle,
+        highlightsSubtitle: data.highlightsSubtitle,
+        highlights: data.highlights
+      },
+      gallery: {
+        galleryTitle: data.galleryTitle,
+        gallerySubtitle: data.gallerySubtitle,
+        galleryDescription: data.galleryDescription,
+        galleryImages: data.galleryImages
+      },
+      location: {
+        locationTitle: data.locationTitle,
+        locationSubtitle: data.locationSubtitle,
+        locationMaps: data.locationMaps,
+        locationButtonText: data.locationButtonText,
+        locationFeatures: data.locationFeatures
+      },
+      floorplans: {
+        floorPlansTitle: data.floorPlansTitle,
+        floorPlansSubtitle: data.floorPlansSubtitle,
+        floorPlans: data.floorPlans
+      },
+      notices: {
+        noticesTitle: data.noticesTitle,
+        noticesSubtitle: data.noticesSubtitle,
+        notices: data.notices
+      },
+      footer: {
+        footerCopyright: data.footerCopyright,
+        footerInfo: data.footerInfo,
+        quickMenu: data.quickMenu
+      }
+    };
 
     try {
-      const docRef = doc(db, 'site', 'data');
-      await setDoc(docRef, data);
+      const promises = Object.entries(parts).map(([key, value]) => {
+        const docRef = doc(db, 'site_content', key);
+        return setDoc(docRef, value);
+      });
+      await Promise.all(promises);
     } catch (error) {
-      handleFirestoreError(error, OperationType.WRITE, 'site/data');
+      handleFirestoreError(error, OperationType.WRITE, 'site_content');
       throw error;
     }
   };

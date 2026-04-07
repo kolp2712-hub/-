@@ -22,6 +22,24 @@ export const QuickMenu = () => {
 
   return (
     <div className="fixed bottom-8 right-8 z-50 flex flex-col items-end gap-4">
+      {/* Floating Phone Label */}
+      {!isOpen && (
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="bg-white px-4 py-3 rounded-2xl shadow-2xl border border-gray-100 mb-2 flex items-center gap-3 hover:scale-105 transition-transform cursor-pointer"
+          onClick={() => window.location.href = `tel:${data.quickMenu.phone}`}
+        >
+          <div className="w-10 h-10 rounded-full flex items-center justify-center text-white" style={{ backgroundColor: data.themeColor }}>
+            <Phone className="w-5 h-5" />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-[10px] text-gray-500 font-medium leading-none mb-1">분양문의/상담예약</span>
+            <span className="text-lg font-black text-gray-900 leading-none">{data.quickMenu.phone}</span>
+          </div>
+        </motion.div>
+      )}
+
       <AnimatePresence>
         {isOpen && (
           <motion.div

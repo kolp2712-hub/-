@@ -44,9 +44,13 @@
     }
   },
   "firestore": {
-    "/site/data": {
-      "schema": "SiteData",
-      "description": "The single source of truth for the site's content"
-    }
+    "/site_content/metadata": { "schema": "SiteData", "description": "SEO and basic site info" },
+    "/site_content/hero": { "schema": "SiteData", "description": "Hero section content" },
+    "/site_content/highlights": { "schema": "SiteData", "description": "Highlights section content" },
+    "/site_content/gallery": { "schema": "SiteData", "description": "Gallery section content" },
+    "/site_content/location": { "schema": "SiteData", "description": "Location section content" },
+    "/site_content/floorplans": { "schema": "SiteData", "description": "Floor plans content" },
+    "/site_content/notices": { "schema": "SiteData", "description": "Notices and news" },
+    "/site_content/footer": { "schema": "SiteData", "description": "Footer and quick menu content" }
   }
 }

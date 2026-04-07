@@ -21,11 +21,17 @@ service cloud.firestore {
     // Site Data Rules
     // ===============================================================
 
-    match /site/data {
+    match /site_content/{document=**} {
       // Anyone can read the site configuration
       allow read: if true;
       
       // Only the verified admin can update the site configuration
+      allow write: if isAdmin();
+    }
+
+    match /site/data {
+      // Legacy support
+      allow read: if true;
       allow write: if isAdmin();
     }
     

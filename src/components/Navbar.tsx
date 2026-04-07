@@ -27,8 +27,7 @@ export const Navbar = () => {
           {/* Left: Logo */}
           <div className="flex-1 flex justify-start">
             <Link to="/" className="flex items-center gap-2 shrink-0">
-              <LogoIcon className="w-8 h-8" style={{ color: data.themeColor }} />
-              <span className="text-lg md:text-xl font-bold tracking-tight text-gray-900 hidden sm:inline">{data.title}</span>
+              <span className="text-lg md:text-xl font-bold tracking-tight text-gray-900">{data.title}</span>
             </Link>
           </div>
 
