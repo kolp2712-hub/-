@@ -162,24 +162,27 @@ const Admin = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Mobile Tab Selector */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 px-4 py-2 flex overflow-x-auto gap-2 no-scrollbar">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 px-4 py-2 flex overflow-x-auto gap-2 no-scrollbar shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
         {[
           { id: 'content', icon: LayoutDashboard, label: '콘텐츠' },
           { id: 'images', icon: ImageIcon, label: '이미지' },
           { id: 'quickmenu', icon: MessageSquare, label: '퀵메뉴' },
           { id: 'notices', icon: FileText, label: '게시글' },
           { id: 'seo', icon: Globe, label: 'SEO' },
-          { id: 'export', icon: Share, label: '내보내기' },
+          { id: 'export', icon: Share, label: '데이터' },
         ].map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as any)}
-            className={`flex-none flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all ${
-              activeTab === tab.id ? 'bg-gray-900 text-white' : 'text-gray-500'
+            onClick={() => {
+              console.log('Switching to tab:', tab.id);
+              setActiveTab(tab.id as any);
+            }}
+            className={`flex-1 min-w-[64px] flex flex-col items-center gap-1 px-2 py-2 rounded-xl transition-all active:scale-95 ${
+              activeTab === tab.id ? 'bg-gray-900 text-white shadow-md' : 'text-gray-500 hover:bg-gray-50'
             }`}
           >
             <tab.icon className="w-5 h-5" />
-            <span className="text-[10px] font-bold">{tab.label}</span>
+            <span className="text-[10px] font-bold whitespace-nowrap">{tab.label}</span>
           </button>
         ))}
       </div>
@@ -188,12 +191,12 @@ const Admin = () => {
       <aside className="w-64 bg-white border-r border-gray-200 hidden lg:flex flex-col sticky top-0 h-screen">
         <div className="p-6 border-b border-gray-100 flex items-center gap-3">
           <Settings className="w-6 h-6 text-gray-900" />
-          <span className="font-bold text-gray-900">Admin Panel</span>
+          <span className="font-bold text-gray-900">관리자 패널</span>
         </div>
         <nav className="flex-1 p-4 space-y-2">
           <button
             onClick={() => setActiveTab('content')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all active:scale-[0.98] ${
               activeTab === 'content' ? 'bg-gray-900 text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'
             }`}
           >
@@ -202,7 +205,7 @@ const Admin = () => {
           </button>
           <button
             onClick={() => setActiveTab('images')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all active:scale-[0.98] ${
               activeTab === 'images' ? 'bg-gray-900 text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'
             }`}
           >
@@ -211,16 +214,16 @@ const Admin = () => {
           </button>
           <button
             onClick={() => setActiveTab('quickmenu')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all active:scale-[0.98] ${
               activeTab === 'quickmenu' ? 'bg-gray-900 text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'
             }`}
           >
             <MessageSquare className="w-4 h-4" />
-            퀵메뉴 설정
+            빠른 메뉴 설정
           </button>
           <button
             onClick={() => setActiveTab('notices')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all active:scale-[0.98] ${
               activeTab === 'notices' ? 'bg-gray-900 text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'
             }`}
           >
@@ -229,7 +232,7 @@ const Admin = () => {
           </button>
           <button
             onClick={() => setActiveTab('seo')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all active:scale-[0.98] ${
               activeTab === 'seo' ? 'bg-gray-900 text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'
             }`}
           >
@@ -238,12 +241,12 @@ const Admin = () => {
           </button>
           <button
             onClick={() => setActiveTab('export')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all active:scale-[0.98] ${
               activeTab === 'export' ? 'bg-gray-900 text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'
             }`}
           >
             <Share className="w-4 h-4" />
-            데이터 내보내기
+            데이터에 대해
           </button>
         </nav>
         <div className="p-4 border-t border-gray-100">
