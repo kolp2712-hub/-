@@ -293,8 +293,8 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const compressAndSetImage = async (file: File, callback: (base64: string) => void) => {
     const options = {
-      maxSizeMB: 0.05, // 50KB로 아주 강력하게 압축 (1MB 제한 내에서 수십 장 저장 가능)
-      maxWidthOrHeight: 1280,
+      maxSizeMB: 0.2, // 200KB로 품질 상향 (데이터 분산 저장 덕분에 여유가 생김)
+      maxWidthOrHeight: 1920, // 해상도 상향
       useWebWorker: true,
     };
     try {
