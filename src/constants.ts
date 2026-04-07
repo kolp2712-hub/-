@@ -126,6 +126,14 @@ export const INITIAL_SITE_DATA: SiteData = {
     phone: "1588-0000",
     facebookUrl: "https://www.facebook.com/"
   },
+
+  // Floating Banner
+  floatingBanner: {
+    line1: "모델하우스 방문예약 접수중",
+    line2: "입주시까지 0원 파격조건",
+    phone: "1588-0000",
+    show: true
+  },
   
   // Theme
   themeColor: "#B6916B",

@@ -125,7 +125,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const collections = [
       'metadata', 'hero', 'highlights', 'gallery', 
-      'location', 'floorplans', 'notices', 'footer', 'e_model'
+      'location', 'floorplans', 'notices', 'footer', 'e_model', 'floating_banner'
     ];
     
     const unsubscribes = collections.map(col => {
@@ -240,6 +240,9 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
         footerCopyright: data.footerCopyright,
         footerInfo: data.footerInfo,
         quickMenu: data.quickMenu
+      },
+      floating_banner: {
+        floatingBanner: data.floatingBanner
       }
     };
 

@@ -87,6 +87,14 @@ export interface SiteData {
     phone: string;
     facebookUrl: string;
   };
+
+  // Floating Banner
+  floatingBanner: {
+    line1: string;
+    line2: string;
+    phone: string;
+    show: boolean;
+  };
   
   // Theme
   themeColor: string;

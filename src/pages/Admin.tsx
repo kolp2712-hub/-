@@ -219,7 +219,7 @@ const Admin = () => {
             }`}
           >
             <MessageSquare className="w-4 h-4" />
-            빠른 메뉴 설정
+            빠른 메뉴 & 플로팅 바
           </button>
           <button
             onClick={() => setActiveTab('notices')}
@@ -575,7 +575,7 @@ const Admin = () => {
             <div className="space-y-6">
               <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 space-y-6">
                 <h3 className="text-lg font-bold flex items-center gap-2">
-                  <MessageSquare className="w-5 h-5" /> 퀵메뉴 (플로팅 버튼) 설정
+                  <MessageSquare className="w-5 h-5" /> 하단 퀵메뉴 (플로팅 버튼) 설정
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
@@ -598,14 +598,55 @@ const Admin = () => {
                       placeholder="010-0000-0000"
                     />
                   </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 space-y-6">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-bold flex items-center gap-2">
+                    <LayoutDashboard className="w-5 h-5" /> 우측 플로팅 바 설정 (보라색 바)
+                  </h3>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={data.floatingBanner.show}
+                      onChange={(e) => updateData({ floatingBanner: { ...data.floatingBanner, show: e.target.checked } })}
+                      className="sr-only peer"
+                    />
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gray-900"></div>
+                    <span className="ml-3 text-sm font-medium text-gray-900">사용 여부</span>
+                  </label>
+                </div>
+                
+                <div className="grid grid-cols-1 gap-6">
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">페이스북 공유 URL</label>
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">1열 문구 (흰색 글씨)</label>
                     <input
                       type="text"
-                      value={data.quickMenu.facebookUrl}
-                      onChange={(e) => updateData({ quickMenu: { ...data.quickMenu, facebookUrl: e.target.value } })}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200"
-                      placeholder="https://www.facebook.com/..."
+                      value={data.floatingBanner.line1}
+                      onChange={(e) => updateData({ floatingBanner: { ...data.floatingBanner, line1: e.target.value } })}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900"
+                      placeholder="예: 모델하우스 방문예약 접수중"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">2열 문구 (노란색 글씨)</label>
+                    <input
+                      type="text"
+                      value={data.floatingBanner.line2}
+                      onChange={(e) => updateData({ floatingBanner: { ...data.floatingBanner, line2: e.target.value } })}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900"
+                      placeholder="예: 입주시까지 0원 파격조건"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">3열 전화번호 (보라색 글씨)</label>
+                    <input
+                      type="text"
+                      value={data.floatingBanner.phone}
+                      onChange={(e) => updateData({ floatingBanner: { ...data.floatingBanner, phone: e.target.value } })}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900"
+                      placeholder="예: 1588-0000"
                     />
                   </div>
                 </div>

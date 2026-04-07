@@ -9,6 +9,7 @@ import { Notices } from '../components/Notices';
 import { InquiryForm } from '../components/InquiryForm';
 import { Footer } from '../components/Footer';
 import { QuickMenu } from '../components/QuickMenu';
+import { FloatingBanner } from '../components/FloatingBanner';
 import { useSite } from '../context/SiteContext';
 
 const Home = () => {
@@ -28,6 +29,7 @@ const Home = () => {
       </main>
       <Footer />
       <QuickMenu />
+      <FloatingBanner />
     </div>
   );
 };
