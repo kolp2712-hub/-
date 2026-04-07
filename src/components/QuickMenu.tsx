@@ -21,7 +21,7 @@ export const QuickMenu = () => {
   };
 
   return (
-    <div className="fixed bottom-8 right-8 z-50 flex flex-col items-end gap-4">
+    <div className="fixed bottom-8 right-8 z-50 hidden lg:flex flex-col items-end gap-4">
       {/* Floating Phone Label */}
       {!isOpen && (
         <motion.div

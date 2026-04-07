@@ -10,13 +10,14 @@ import { InquiryForm } from '../components/InquiryForm';
 import { Footer } from '../components/Footer';
 import { QuickMenu } from '../components/QuickMenu';
 import { FloatingBanner } from '../components/FloatingBanner';
+import { MobileStickyFooter } from '../components/MobileStickyFooter';
 import { useSite } from '../context/SiteContext';
 
 const Home = () => {
   const { data } = useSite();
 
   return (
-    <div className="min-h-screen bg-white" style={{ fontFamily: data.fontFamily }}>
+    <div className="min-h-screen bg-white pb-20 lg:pb-0" style={{ fontFamily: data.fontFamily }}>
       <Navbar />
       <main>
         <Hero />
@@ -30,6 +31,7 @@ const Home = () => {
       <Footer />
       <QuickMenu />
       <FloatingBanner />
+      <MobileStickyFooter />
     </div>
   );
 };
