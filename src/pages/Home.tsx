@@ -11,6 +11,7 @@ import { Footer } from '../components/Footer';
 import { QuickMenu } from '../components/QuickMenu';
 import { FloatingBanner } from '../components/FloatingBanner';
 import { MobileStickyFooter } from '../components/MobileStickyFooter';
+import { MobilePopup } from '../components/MobilePopup';
 import { useSite } from '../context/SiteContext';
 
 const Home = () => {
@@ -32,6 +33,7 @@ const Home = () => {
       <QuickMenu />
       <FloatingBanner />
       <MobileStickyFooter />
+      <MobilePopup />
     </div>
   );
 };
