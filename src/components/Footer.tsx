@@ -58,8 +58,17 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-16 pt-8 text-center text-xs text-gray-500">
-          {data.footerCopyright}
+        <div className="border-t border-gray-800 mt-16 pt-8 text-center space-y-2">
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-[10px] text-gray-500">
+            <span>운영자: 김동원</span>
+            <span className="hidden sm:inline text-gray-700">|</span>
+            <span>이메일: kolp2712@gmail.com</span>
+            <span className="hidden sm:inline text-gray-700">|</span>
+            <span>사이트명: 평택브레인시티동원비스타</span>
+          </div>
+          <p className="text-[10px] text-gray-500">
+            Copyright 2026. 김동원 All rights reserved.
+          </p>
         </div>
       </div>
     </footer>
